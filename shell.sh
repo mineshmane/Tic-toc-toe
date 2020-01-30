@@ -10,11 +10,6 @@ TAIL=0;
 HEAD=1;
 BOARD=10;
 
-for (( i=1; i < $BOARD; i++ ))
-	do
-		board[$i]=$i;
-	done
-
 function  printBoard(){
 
 	echo "${board[1]}"
@@ -39,8 +34,10 @@ function userInput() {
 
 function initializingBoard(){
 
-	board=(0,0,0,0,0,0,0,0,0)
-
+for (( i=1; i< $BOARD; i++ ))
+	do
+	board[$i]=$i
+	done
 }
 
 function toss(){
