@@ -1,4 +1,4 @@
-#!/bin/bash  
+#!/bin/bash -x 
 
 echo "Welcome to Tic tac toe Game"
  
@@ -46,9 +46,9 @@ function cornerCheck()
    then
 		for((i=1; i<=BOARD_POSITION; i=$(($i+2)) ))
 		do
-				if [ ${board[$i]} == '-' ]
-				then
-					computerPosition=$i
+		if [ ${board[$i]} == '-' ]
+		then
+			computerP=$i
             	board[$computerP]=$computer
             	compWinMove=true
             break
@@ -59,6 +59,40 @@ function cornerCheck()
 				fi
 		done
 	fi
+}
+
+function middleCheck()
+{
+	middle=5
+	if [[ $compWinMove = false ]] && [[ ${board[$middle]} == '-' ]]
+	then
+		computerP=$middle
+               board[$computerP]=$computer
+               compWinMove=true
+   fi
+
+}
+
+function randomCheck(){
+	 if [ $compWinMove = false ]
+	 then
+                for((i=2; i<=BOARD_POSITION; i=$(($i+2)) ))
+                do
+                if [ ${board[$i]} == '-' ]
+                then
+                        computerP=$i
+                board[$computerP]=$computer
+                compWinMove=true
+                break
+                 fi
+                  if [ $i -eq 3 ] || [ $i -eq 6 ]
+                  then
+                          i=$(($i+1))
+                  fi
+                done
+        fi
+
+
 }
 
 
@@ -246,6 +280,8 @@ function computerInput(){
 	checkWinningMove $row $column
 	checkWinningMove $column $row
 	cornerCheck
+	middleCheck
+	randomCheck
 	POSITION=$((RANDOM%9+1))
 
 	if [ $winMove == false ]
@@ -272,7 +308,6 @@ function ticTacToe(){
 		computer='O'
 		echo "Player play first"
 		printBoard
-                userInput
 
 	else
 		player='X'
@@ -294,11 +329,12 @@ do
 			checkHorizontalCase $player
 			checkVerticalCase $player
 			checkDiagonalCase $player
+			checkTieCase $player
 		else
 			computerInput
 			checkHorizontalCase $computer
-                        checkVerticalCase $computer
-                        checkDiagonalCase $computer
-
+        	checkVerticalCase $computer
+            checkDiagonalCase $computer
+			checkTieCase $computer
 		fi
 done
